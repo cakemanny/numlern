@@ -26,7 +26,9 @@
       state.display = '';
     } else {
       // TODO: work out how to put the number in words
-      state.display = '';
+      if (state.lastResult <= -2) {
+        state.display = '' + state.currentNumber;
+      }
     }
 
     let lang = 'de'
@@ -39,7 +41,9 @@
     msg.text = '' + state.currentNumber;
     msg.lang = lang;
     msg.rate = 1.25;
-    msg.voice = voices[voices.length - 1];
+    if (voices.length) {
+      msg.voice = voices[Math.floor(Math.random() * voices.length)];
+    }
     msg.onerror = (e) => { console.log(e); };
     speechSynthesis.speak(msg);
 
@@ -64,7 +68,11 @@
         answerElem.value = '';
         mainLoop();
       } else {
-        state.lastResult = -1;
+        if (state.lastResult == 1) {
+          state.lastResult = -1;
+        } else {
+          state.lastResult -= 1;
+        }
         answerElem.value = '';
         mainLoop(true);
       }
