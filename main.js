@@ -1,13 +1,12 @@
 (function (window) {
   "strict";
-  // In the future we might want to make these parameters
-  const
-    LANG = 'de',
-    SPEECH_RATE = 1.25,
-    DIGITS = 3
-  ;
 
   let state = {
+    settings: {
+      digits: 3,
+      lang: 'de',
+      speechRate: 1.25,
+    },
     currentNumber: 0,
     score: 0,
     lastResult: 0
@@ -24,10 +23,13 @@
     , scoreBox = document.getElementById('score-box')
     , startButton = document.getElementById('start')
     , gameOverElem = document.getElementById('game-over')
+    , digitsElem = document.getElementById('digits')
+    , langElem = document.getElementById('lang')
+    , speechRateElem = document.getElementById('speech-rate')
     ;
 
-  function nextNumber() {
-    let n = Math.round(Math.random() * (10 ** DIGITS));
+  function nextNumber(settings) {
+    let n = Math.round(Math.random() * (10 ** state.settings.digits));
     return n;
   }
 
@@ -43,13 +45,13 @@
     }
 
     let voices = window.speechSynthesis.getVoices().filter(voice => {
-      return voice.lang && voice.lang.startsWith(LANG);
+      return voice.lang && voice.lang.startsWith(state.settings.lang);
     });
 
     let msg = new SpeechSynthesisUtterance();
     msg.text = '' + state.currentNumber;
-    msg.lang = LANG;
-    msg.rate = SPEECH_RATE;
+    msg.lang = state.settings.lang;
+    msg.rate = state.settings.speechRate;
     if (voices.length) {
       msg.voice = voices[Math.floor(Math.random() * voices.length)];
     }
@@ -86,6 +88,17 @@
         mainLoop(true);
       }
     }
+  };
+
+  digitsElem.onchange = () => {
+    // |0 convert to int
+    state.settings.digits = digitsElem.valueAsNumber|0;
+  };
+  langElem.onchange = () => {
+    state.settings.lang = langElem.value;
+  };
+  speechRateElem.onchange = () => {
+    state.settings.speechRate = speechRateElem.valueAsNumber;
   };
 
   startButton.onclick = function () {

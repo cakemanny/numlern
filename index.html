@@ -12,6 +12,24 @@
 </style>
 
 <div id="app">
+  <div class="config">
+    <label for=digits>
+      Number of Digits: <input type=number min=1 max=10 value=3 id="digits"/>
+    </label>
+    <label for=lang>
+      Lang:
+      <select id="lang">
+        <option>de</option>
+        <option>pl</option>
+        <option>en</option>
+        <option>es</option>
+        <option>nl</option>
+      </select>
+    </label>
+    <label for=rate>
+      Rate of Speech: <input type=number min=0.5 max=2 value=1 step=0.25 id="speech-rate"/>
+    </label>
+  </div>
   <button id="start">START</button>
   <h3 id="game-over" class="hidden">Game Over</h3>
   <div id="score-box" class="score-box">score: <i id="score"></i></div>
